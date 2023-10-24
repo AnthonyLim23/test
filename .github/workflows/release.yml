@@ -63,6 +63,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
+      - name: Store changes
+        uses: actions/upload-artifact@v3
+        with:
+          name: setup
+          path: setup.py
+
 
   update_setup:
     needs: [build_wheels]
