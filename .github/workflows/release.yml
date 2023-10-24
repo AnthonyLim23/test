@@ -93,5 +93,5 @@ jobs:
           git commit -m "update version number"
           git push
       - name: check
-        run: echo ${{"setup.py"}}
+        run: echo ${ 'setup.py' }
  
