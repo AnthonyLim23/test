@@ -38,7 +38,7 @@ jobs:
     needs: [update_version]
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -73,6 +73,8 @@ jobs:
   update_setup:
     needs: [build_wheels]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: checkout
         uses: actions/checkout@v3
