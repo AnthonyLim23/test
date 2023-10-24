@@ -85,12 +85,13 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: setup
-      - name: check
-        run: echo ${{ setup.py }}
-      - name: Commit on merge
+     - name: Commit on merge
         run: |
           git config user.name github-actions
           git congig user.email github-actions@github.com
           git add setup.py
           git commit -m "update version number"
           git push
+      - name: check
+        run: echo ${{setup.py}}
+ 
