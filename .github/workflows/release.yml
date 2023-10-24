@@ -86,7 +86,7 @@ jobs:
         with:
           name: setup2
       - name: check
-        run: echo ${ 'setup.py' }
+        run: echo $('setup.py')
       - name: Commit on merge
         run: |
           git config user.name github-actions
