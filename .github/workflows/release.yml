@@ -18,16 +18,13 @@ jobs:
         with:
           fetch-depth: "0"
       - name: Update version on merge
-        if: github.event_name == 'pull_request' #'merge_group'
+        if: github.event_name == 'merge_group'
         run:  |
             python tools/version.py "beta"
       - name: Update version on release
         if: github.event_name == 'release'
         run: |
             python tools/version.py "minor"
-      - name: check
-        run: cat setup.py
- 
       - name: Store changes
         uses: actions/upload-artifact@v3
         with:
@@ -66,8 +63,6 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
-      - name: check
-        run: cat setup.py
       - name: Store changes
         uses: actions/upload-artifact@v3
         with:
@@ -90,8 +85,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: setup2
-      - name: check
-        run: cat setup.py
       - name: Commit on merge
         run: |
           git config user.name github-actions
