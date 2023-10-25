@@ -27,7 +27,7 @@ jobs:
 
 
   update_setup:
-    needs: [build_wheels]
+    needs: [update_version]
     runs-on: ubuntu-latest
     permissions:
       contents: write
