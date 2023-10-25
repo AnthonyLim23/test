@@ -4,10 +4,7 @@ from tools.setup_helper import get_extensions
 
 VERSION = "0.1.0b3"
 PACKAGE_NAME = 'MuonDataLib'
-
-
 extensions = get_extensions(PACKAGE_NAME)
-
 setup(
         name=PACKAGE_NAME,
         requires=['numpy'],
