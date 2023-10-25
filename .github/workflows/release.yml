@@ -2,6 +2,8 @@ name: Build and upload to PyPI
 
 on:
   merge_group:
+  pull_request_review:
+    types: [submitted]
   push:
     branches:
       - 'main'
@@ -12,6 +14,7 @@ permissions:
 jobs:
   update_version:
     name: update version
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -19,14 +22,8 @@ jobs:
         with:
           fetch-depth: "0"
       - name: Update version on merge
-        
-        if: ${{ github.event_name}} == 'merge_group'
         run:  |
             python tools/version.py "beta"
-      - name: Update version on release
-        if: ${{ github.event.push.head.ref }} == 'release-next'
-        run: |
-            python tools/version.py "minor"
       - name: Store changes
         uses: actions/upload-artifact@v3
         with:
@@ -36,6 +33,7 @@ jobs:
 
   build_wheels:
     name: Build and test wheels on ${{ matrix.os }}
+    if: github.event.review.state == 'approved'
     runs-on: ${{ matrix.os }}
     needs: [update_version]
     strategy:
