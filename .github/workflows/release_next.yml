@@ -96,5 +96,5 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           title: Update from release
-          branch: release-next
+          branch: release-bump
           
