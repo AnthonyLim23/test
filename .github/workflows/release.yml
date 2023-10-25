@@ -1,7 +1,7 @@
 name: Build and upload to PyPI
 
 on:
-  pull_request:
+  merge_group:
     branches:
       - 'main'
   release:
