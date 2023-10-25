@@ -2,7 +2,7 @@ import argparse
 import sys
 
 
-VERSION_STRING = "VERSION ="
+VERSION_STRING = "VERSION = "
 VERSION_MARKS = '"'
 ORDER = ['major', 'minor', 'patch', 'beta']
 VERSION_SEP = ['.', '.', 'b', '']
