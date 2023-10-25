@@ -1,12 +1,14 @@
 name: Build and upload to PyPI
 
 on:
-  merge_group:
+  pull_request_review:
     branches:
       - 'main'
+    types:
+      - closed
   release:
     types:
-        - published
+      - published
 
 jobs:
   update_version:
@@ -18,7 +20,8 @@ jobs:
         with:
           fetch-depth: "0"
       - name: Update version on merge
-        if: github.event_name == 'merge_group'
+        
+        if: github.event.review.state == 'APPROVED'
         run:  |
             python tools/version.py "beta"
       - name: Update version on release
@@ -77,12 +80,12 @@ jobs:
       contents: write
     steps:
       - name: checkout
-        if: github.event_name == 'merge_group'
+        if: github.event_name == 'pull_request'
         uses: actions/checkout@v4
         with:
           fetch-depth: "0"
-          repository: ${{github.event.merge_group.head.repo.full_name }}
-          ref: ${{ github.event.merge_group.head.ref }}
+          repository: ${{github.event.review.head.repo.full_name }}
+          ref: ${{ github.event.review.head.ref }}
       - name: checkout
         if: github.event_name == 'release'
         uses: actions/checkout@v4
@@ -96,7 +99,9 @@ jobs:
         with:
           name: setup2
       - name: check
-        run: cat setup.py
+        run: |
+          cat setup.py
+          echo ${{github.event.review.head.repo.full_name }}
       - name: Commit on merge
         run: |
           git config user.name github-actions
