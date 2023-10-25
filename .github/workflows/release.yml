@@ -17,11 +17,11 @@ jobs:
           fetch-depth: "0"
       - name: Update version on merge
         
-        if: $GITHUB_REF == 'main'
+        if: ${{ github.event.push.head.ref }} == 'main'
         run:  |
             python tools/version.py "beta"
       - name: Update version on release
-        if: $GITHUB_REF == 'release-next'
+        if: ${{ github.event.push.head.ref }} == 'release-next'
         run: |
             python tools/version.py "minor"
       - name: Store changes
