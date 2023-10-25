@@ -1,15 +1,15 @@
 name: Build and upload to PyPI
 
 on:
-  pull_request_review:
-    types: [submitted]
+  push:
+    branches:
+      - 'release-next'
 permissions:
   contents: write
 
 jobs:
   update_version:
     name: update version
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -17,8 +17,8 @@ jobs:
         with:
           fetch-depth: "0"
       - name: Update version on merge
-        run:  |
-            python tools/version.py "beta"
+        run: |
+            python tools/version.py "minor"
       - name: Store changes
         uses: actions/upload-artifact@v3
         with:
@@ -28,7 +28,6 @@ jobs:
 
   build_wheels:
     name: Build and test wheels on ${{ matrix.os }}
-    if: github.event.review.state == 'approved'
     runs-on: ${{ matrix.os }}
     needs: [update_version]
     strategy:
@@ -72,11 +71,12 @@ jobs:
       contents: write
     steps:
       - name: checkout_release
+        if: ${{ github.event.push.head.ref }} == 'release-next'
         uses: actions/checkout@v4
         with:
           fetch-depth: "0"
-          repository: ${{github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{github.event.push.head.repo.full_name }}
+          ref: ${{ github.event.push.head.ref }}
  
       - uses: actions/download-artifact@v3
         with:
@@ -84,7 +84,7 @@ jobs:
       - name: check
         run: |
           cat setup.py
-          echo ${{github.event.pull_request.head.repo.full_name }}
+          echo ${{github.event.merge_group.head.repo.full_name }}
       - name: Commit on merge
         run: |
           git config user.name github-actions
@@ -92,4 +92,9 @@ jobs:
           git add setup.py
           git commit -m "update version number"
           git push
-
+      - name: create_PR
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: Update from release
+          branch: release-next
+          
