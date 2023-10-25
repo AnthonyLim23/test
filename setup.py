@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 from tools.setup_helper import get_extensions
 
 
-VERSION = "0.1.0b2"
+VERSION = "0.1.0b3"
 PACKAGE_NAME = 'MuonDataLib'
 
 
