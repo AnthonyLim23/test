@@ -1,14 +1,10 @@
 name: Build and upload to PyPI
 
 on:
-  pull_request_review:
+  push:
     branches:
       - 'main'
-    types:
-      - closed
-  release:
-    types:
-      - published
+      - 'release-next'
 
 jobs:
   update_version:
@@ -21,11 +17,11 @@ jobs:
           fetch-depth: "0"
       - name: Update version on merge
         
-        if: github.event.review.state == 'APPROVED'
+        if: $GITHUB_REF == 'main'
         run:  |
             python tools/version.py "beta"
       - name: Update version on release
-        if: github.event_name == 'release'
+        if: $GITHUB_REF == 'release-next'
         run: |
             python tools/version.py "minor"
       - name: Store changes
@@ -80,20 +76,11 @@ jobs:
       contents: write
     steps:
       - name: checkout
-        if: github.event_name == 'pull_request'
         uses: actions/checkout@v4
         with:
           fetch-depth: "0"
-          repository: ${{github.event.review.head.repo.full_name }}
-          ref: ${{ github.event.review.head.ref }}
-      - name: checkout
-        if: github.event_name == 'release'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: "0"
-          repository: ${{github.event.release.head.repo.full_name }}
-          ref: ${{ github.event.release.head.ref }}
-
+          repository: ${{github.event.push.head.repo.full_name }}
+          ref: ${{ github.event.push.head.ref }}
 
       - uses: actions/download-artifact@v3
         with:
