@@ -58,7 +58,5 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git checkout --no-track -b version_bump origin/main
-          git add setup.py
-          git commit -m "update version number"
-          git push         
+          git checkout --no-track -b version_bump origin/release-next
+          git push --set-upstream origin version_bump
