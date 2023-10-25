@@ -55,7 +55,7 @@ jobs:
           git commit -m "update version number"
           git push
       - name: create_PR
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           title: Update from release
           commit-message: update version bump
