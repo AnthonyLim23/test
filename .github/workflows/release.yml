@@ -77,14 +77,26 @@ jobs:
       contents: write
     steps:
       - name: checkout
+        if: github.event_name == 'merge_group'
         uses: actions/checkout@v4
         with:
           fetch-depth: "0"
-          repository: ${{github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{github.event.merge_group.head.repo.full_name }}
+          ref: ${{ github.event.merge_group.head.ref }}
+      - name: checkout
+        if: github.event_name == 'release'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+          repository: ${{github.event.release.head.repo.full_name }}
+          ref: ${{ github.event.release.head.ref }}
+
+
       - uses: actions/download-artifact@v3
         with:
           name: setup2
+      - name: check
+        run: cat setup.py
       - name: Commit on merge
         run: |
           git config user.name github-actions
