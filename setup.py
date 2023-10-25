@@ -8,6 +8,7 @@ PACKAGE_NAME = 'MuonDataLib'
 
 extensions = get_extensions(PACKAGE_NAME)
 
+
 setup(
         name=PACKAGE_NAME,
         requires=['numpy'],
